@@ -1,9 +1,9 @@
-import React from 'react'
-import SignupPage from './components/pages/SignupPage'
-import Navbar from './components/navbar/Navbar'
-import { Switch,Route,Redirect } from 'react-router-dom'
-import WelcomePage from './components/pages/WelcomePage'
-
+import React from "react";
+import SignupPage from "./components/pages/SignupPage";
+import Navbar from "./components/navbar/Navbar";
+import { Switch, Route, Redirect } from "react-router-dom";
+import WelcomePage from "./components/pages/WelcomePage";
+import UserDetailsUpdate from "./components/pages/UserDetailsUpdate";
 
 const App = () => {
   return (
@@ -16,13 +16,16 @@ const App = () => {
           <WelcomePage />
         </Route>
 
-        <Route path="*">
-          <Redirect to="/auth"/>
+        <Route path="/user">
+          <UserDetailsUpdate />
         </Route>
 
+        <Route path="*">
+          <Redirect to="/auth" />
+        </Route>
       </Switch>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
