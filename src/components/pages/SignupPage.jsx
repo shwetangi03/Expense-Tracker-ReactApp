@@ -1,10 +1,12 @@
 import React, { useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const SignupPage = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordTwoRef = useRef();
   const [swap, setSwap] = useState(false);
+  const history = useHistory();
 
   const swapHandler = () => {
     setSwap((prevValue) => !prevValue);
@@ -15,9 +17,10 @@ const SignupPage = () => {
     const enterdEmail = emailRef.current.value;
     const enterdPassword = passwordRef.current.value;
     // login
+    console.log(passwordRef.current);
+    console.log(passwordTwoRef.current);
     if (swap) {
       if (
-        passwordRef.current.value === passwordTwoRef.current.value &&
         passwordRef.current.value.trim().length > 5 &&
         emailRef.current.value.includes("@") &&
         emailRef.current.value.includes(".com")
@@ -39,12 +42,13 @@ const SignupPage = () => {
           );
           if (res.ok) {
             const data = await res.json();
-            console.log("logged in successfully ");
+            console.log(data);
             localStorage.setItem("JWTTOKEN", data.idToken);
             localStorage.setItem("userID", data.localId);
+            localStorage.setItem("Email", data.email);
             emailRef.current.value = "";
             passwordRef.current.value = "";
-            passwordTwoRef.current.value = "";
+            history.replace("/welcome");
           } else {
             const data = await res.json();
             alert(data.error.message);
@@ -80,11 +84,10 @@ const SignupPage = () => {
           if (res.ok) {
             const data = await res.json();
             console.log("signed up successfully ");
-            localStorage.setItem("JWTTOKEN", data.idToken);
-            localStorage.setItem("userID", data.localId);
             emailRef.current.value = "";
             passwordRef.current.value = "";
             passwordTwoRef.current.value = "";
+            setSwap(true);
           } else {
             const data = await res.json();
             alert(data.error.message);
@@ -134,15 +137,17 @@ const SignupPage = () => {
             />
           </div>
 
-          <div className="flex justify-center border-gray-300 border-2 p-1 rounded-md">
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              ref={passwordTwoRef}
-              maxLength="8"
-              required
-            />
-          </div>
+          {!swap && (
+            <div className="flex justify-center border-gray-300 border-2 p-1 rounded-md">
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                ref={passwordTwoRef}
+                maxLength="8"
+                required
+              />
+            </div>
+          )}
 
           <div className="flex justify-center border-gray-300 border-2 p-1 rounded-3xl bg-cyan-500">
             <button onClick={signupHandler}>

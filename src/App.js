@@ -1,7 +1,7 @@
 import React from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 import SignupPage from "./components/pages/SignupPage";
 import Navbar from "./components/navbar/Navbar";
-import { Switch, Route, Redirect } from "react-router-dom";
 import WelcomePage from "./components/pages/WelcomePage";
 import UserDetailsUpdate from "./components/pages/UserDetailsUpdate";
 
@@ -16,7 +16,7 @@ const App = () => {
           <WelcomePage />
         </Route>
 
-        <Route path="/user">
+        <Route path={"/user"}>
           <UserDetailsUpdate />
         </Route>
 

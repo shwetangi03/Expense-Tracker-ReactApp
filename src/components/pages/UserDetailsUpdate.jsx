@@ -1,15 +1,51 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 const UserDetailsUpdate = () => {
   const nameRef = useRef();
   const urlRef = useRef();
+
+  const autoGetData = async () => {
+    const token = localStorage.getItem("JWTTOKEN");
+    console.log(token);
+    try {
+      const res = await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBFdlQTui429wZpw9CRTBvvYZAe66D9E7o",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            idToken: token,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        data.users.forEach((element) => {
+          console.log(data.users);
+          nameRef.current.value = element.displayName;
+          urlRef.current.value = element.photoUrl;
+        });
+      } else {
+        const data = await res.json();
+        console.log(data);
+      }
+    } catch (error) {
+      console.log("Auto fetch error");
+    }
+  };
+
+  useEffect(() => {
+    autoGetData();
+  }, []);
 
   const updateHandler = async (event) => {
     event.preventDefault();
     console.log("Updating...");
     const enteredName = nameRef.current.value;
     const enteredUrl = urlRef.current.value;
-    const token = localStorage.getItem("JWITOKEN");
+    const token = localStorage.getItem("JWTTOKEN");
 
     try {
       const res = await fetch(
@@ -29,11 +65,11 @@ const UserDetailsUpdate = () => {
       );
       if (res.ok) {
         const data = await res.json();
-        console.log("updated successfully ");
-        nameRef.current.value = "";
-        urlRef.current.value = "";
+        console.log(data);
+        alert("wohoo! your data saved ");
       } else {
         const data = await res.json();
+        console.log(data);
         alert(data.error.message);
       }
     } catch (error) {
