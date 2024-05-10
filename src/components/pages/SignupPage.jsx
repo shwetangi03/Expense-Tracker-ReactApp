@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
+import ExpenseContext from "../../store/expense-context";
 
 const SignupPage = () => {
   const emailRef = useRef();
@@ -7,6 +8,7 @@ const SignupPage = () => {
   const passwordTwoRef = useRef();
   const [swap, setSwap] = useState(false);
   const history = useHistory();
+  const ctx = useContext(ExpenseContext)
 
   const swapHandler = () => {
     setSwap((prevValue) => !prevValue);
@@ -48,6 +50,7 @@ const SignupPage = () => {
             localStorage.setItem("Email", data.email);
             emailRef.current.value = "";
             passwordRef.current.value = "";
+            ctx.login(true)
             history.replace("/welcome");
           } else {
             const data = await res.json();
