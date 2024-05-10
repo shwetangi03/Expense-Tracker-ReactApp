@@ -14,7 +14,7 @@ const App = () => {
 
   return (
     <div>
-      <Navbar />
+      {ctx.isLogin &&<Navbar />}
       <Switch>
         {!ctx.isLogin && (
           <Route path="/auth">
@@ -40,7 +40,7 @@ const App = () => {
           </Route>
         )}
 
-        {!ctx.isLogin && (
+        {ctx.isLogin && (
           <Route path={"/expenses"}>
             <Expenses />
           </Route>

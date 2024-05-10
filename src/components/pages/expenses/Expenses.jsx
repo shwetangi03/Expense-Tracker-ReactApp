@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import Card from "./Card";
 import ExpensesTotal from "./ExpensesTotal";
@@ -7,10 +8,34 @@ import ExpensesList from "./ExpensesList";
 
 const Expenses = () => {
   const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const itemsHandler = (data) => {
     setItems([...items, data]);
   };
+
+  const autoReloadExpenses = async () => {
+    const userId = localStorage.getItem("userID");
+    try {
+      const res = await axios.get(
+        `https://expense-tracker-real-time-data-default-rtdb.firebaseio.com/expenses/${userId}.json`
+      );
+      const data = res.data;
+      let arr = [];
+      let index = 0;
+      for (const key in data) {
+        arr[index] = data[key];
+        index++;
+      }
+      setItems([...arr]);
+    } catch (error) {
+      console.log(`Some err ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    autoReloadExpenses();
+  }, []);
 
   const itemsList = items.map((element) => {
     return (
@@ -21,15 +46,26 @@ const Expenses = () => {
       />
     );
   });
+  let totalAmount = 0;
+  const totalCal = () => {
+    items.map((element) => {
+      totalAmount = totalAmount + Number(element.enteredMoney);
+    });
+    setTotal(totalAmount);
+  };
+
+  useEffect(() => {
+    totalCal();
+  }, [items]);
   return (
     <div>
-      <Card>
-        <ExpensesTotal />
-      </Card>
       <Card>
         <ExpensesForm onClick={itemsHandler} />
       </Card>
       <Card>{itemsList}</Card>
+      <Card>
+        <ExpensesTotal total={total} />
+      </Card>
     </div>
   );
 };
