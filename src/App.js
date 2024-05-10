@@ -1,9 +1,11 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+
 import SignupPage from "./components/pages/SignupPage";
 import Navbar from "./components/navbar/Navbar";
 import WelcomePage from "./components/pages/WelcomePage";
 import UserDetailsUpdate from "./components/pages/UserDetailsUpdate";
+import ResetPassword from "./components/pages/ResetPassword";
 
 const App = () => {
   return (
@@ -18,6 +20,10 @@ const App = () => {
 
         <Route path={"/user"}>
           <UserDetailsUpdate />
+        </Route>
+
+        <Route path={"/resetPassword"}>
+          <ResetPassword />
         </Route>
 
         <Route path="*">

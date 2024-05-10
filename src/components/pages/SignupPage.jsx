@@ -102,6 +102,11 @@ const SignupPage = () => {
     }
   };
 
+  const forgetPasswordHandler = (event) => {
+    event.preventDefault();
+    history.replace("/resetPassword");
+  };
+
   return (
     <div
       className="flex justify-center bg-cover bg-center h-screen"
@@ -132,7 +137,7 @@ const SignupPage = () => {
               placeholder="Password"
               minLength="6"
               ref={passwordRef}
-              maxLength="8"
+              maxLength="18"
               required
             />
           </div>
@@ -143,7 +148,7 @@ const SignupPage = () => {
                 type="password"
                 placeholder="Confirm Password"
                 ref={passwordTwoRef}
-                maxLength="8"
+                maxLength="18"
                 required
               />
             </div>
@@ -155,7 +160,9 @@ const SignupPage = () => {
             </button>
           </div>
           <div className="flex justify-center underline">
-            {swap && <label>Forget password</label>}
+            {swap && (
+              <button onClick={forgetPasswordHandler}>Forget password</button>
+            )}
           </div>
         </div>
 

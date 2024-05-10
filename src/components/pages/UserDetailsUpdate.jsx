@@ -67,6 +67,8 @@ const UserDetailsUpdate = () => {
         const data = await res.json();
         console.log(data);
         alert("wohoo! your data saved ");
+        nameRef.current.value = "";
+        urlRef.current.value = "";
       } else {
         const data = await res.json();
         console.log(data);
