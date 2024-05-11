@@ -5,7 +5,6 @@ const WelcomePage = () => {
   const [checkVerified, setVerified] = useState(false);
 
   const autoVerifiedEmailCheck = async () => {
-    // const jwttoken = localStorage.getItem("JWTTOKEN");
     const token = localStorage.getItem("JWTTOKEN");
 
     try {

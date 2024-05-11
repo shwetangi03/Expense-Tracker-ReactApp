@@ -6,7 +6,6 @@ const ExpensesList = (props) => {
   const ctx = useContext(ExpenseContext);
 
   const deleteBtnHandler = async (event) => {
-    event.preventDefault();
     const userId = localStorage.getItem("userID");
     try {
       const res = await axios.delete(
@@ -14,6 +13,7 @@ const ExpensesList = (props) => {
       );
       console.log(res);
       console.log("Expense successfully deleted");
+      ctx.forReload();
     } catch (error) {
       console.log(`Some error ${error}`);
     }
@@ -28,10 +28,10 @@ const ExpensesList = (props) => {
     <div className="flex justify-center p-2">
       <li className="flex h-10 w-2/5 p-2 bg-indigo-400 ">
         <div className="px-3">
-          <h2>{props.category}</h2>
+          <h2>{props.description}</h2>
         </div>
         <div className="px-3">
-          <label> {props.description}</label>
+          <label> {props.category}</label>
         </div>
         <div className="px-3">
           <label> {props.money}</label>

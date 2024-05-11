@@ -11,21 +11,22 @@ const ExpensesForm = (props) => {
 
   const buttonHandler = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const data = {
       enteredMoney: moneyRef.current.value,
       enteredDescription: descriptionRef.current.value,
       enteredCategory: categoryRef.current.value,
     };
     const userId = localStorage.getItem("userID");
-    props.onClick(data);
 
-    if (moneyRef.current.value != "" && descriptionRef.current.value != "") {
+    if (moneyRef.current.value !== "" && descriptionRef.current.value !== "") {
       try {
         const res = axios.post(
           `https://expense-tracker-real-time-data-default-rtdb.firebaseio.com/expenses/${userId}.json`,
           data
         );
         console.log(res);
+        ctx.itemsSetup(data);
       } catch (error) {
         console.log(`Some error ${error}`);
       }
@@ -37,8 +38,8 @@ const ExpensesForm = (props) => {
 
   if (ctx.isEditOn) {
     moneyRef.current.value = ctx.editValues.money;
-    descriptionRef.current.value = ctx.editValues.money;
-    categoryRef.current.value = ctx.editValues.money;
+    descriptionRef.current.value = ctx.editValues.description;
+    categoryRef.current.value = ctx.editValues.category;
   }
 
   const editHandler = async (event) => {
@@ -61,6 +62,10 @@ const ExpensesForm = (props) => {
         );
         console.log(res);
         console.log("deleted successfully");
+        moneyRef.current.value = "";
+        descriptionRef.current.value = "";
+        categoryRef.current.value = "";
+        ctx.forReload();
       } catch (error) {
         console.log(`Some error ${error}`);
       }
@@ -80,8 +85,6 @@ const ExpensesForm = (props) => {
           <input
             type="number"
             name=""
-            h-96
-            rounded-lg
             id="money"
             placeholder="Amount"
             ref={moneyRef}
@@ -111,7 +114,7 @@ const ExpensesForm = (props) => {
                 className=" bg-black text-white p-1 px-5 rounded-md"
                 onClick={buttonHandler}
               >
-                {isLoading ? "Loading" : "Submit"}
+                {isLoading ? "Loading..." : "Submit"}
               </button>
             )}
 
@@ -120,7 +123,7 @@ const ExpensesForm = (props) => {
                 className=" bg-black text-white p-1 px-5 rounded-md"
                 onClick={editHandler}
               >
-                {isLoading ? "Loading" : "Update"}
+                {isLoading ? "Loading..." : "Update"}
               </button>
             )}
           </div>
