@@ -1,7 +1,10 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
+import ExpenseContext from "../../../store/expense-context";
 
 const ExpensesForm = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const ctx = useContext(ExpenseContext);
   const moneyRef = useRef();
   const descriptionRef = useRef();
   const categoryRef = useRef();
@@ -16,16 +19,55 @@ const ExpensesForm = (props) => {
     const userId = localStorage.getItem("userID");
     props.onClick(data);
 
-    try {
-      const res = axios.post(
-        `https://expense-tracker-real-time-data-default-rtdb.firebaseio.com/expenses/${userId}.json`,
-        data
-      );
-      console.log(res);
-    } catch (error) {
-      console.log(`Some error ${error}`);
+    if (moneyRef.current.value != "" && descriptionRef.current.value != "") {
+      try {
+        const res = axios.post(
+          `https://expense-tracker-real-time-data-default-rtdb.firebaseio.com/expenses/${userId}.json`,
+          data
+        );
+        console.log(res);
+      } catch (error) {
+        console.log(`Some error ${error}`);
+      }
+    } else {
+      alert("input fields are empty!");
+    }
+    setIsLoading(false);
+  };
+
+  if (ctx.isEditOn) {
+    moneyRef.current.value = ctx.editValues.money;
+    descriptionRef.current.value = ctx.editValues.money;
+    categoryRef.current.value = ctx.editValues.money;
+  }
+
+  const editHandler = async (event) => {
+    event.preventDefault();
+    ctx.editStateFunction(false);
+
+    if (ctx.isEditOn) {
+      let id = ctx.editValues.id;
+      const userIdEdit = localStorage.getItem("userID");
+      const data = {
+        enteredMoney: moneyRef.current.value,
+        enteredDescription: descriptionRef.current.value,
+        enteredCategory: categoryRef.current.value,
+      };
+      setIsLoading(true);
+      try {
+        const res = await axios.put(
+          `https://expense-tracker-real-time-data-default-rtdb.firebaseio.com/expenses/${userIdEdit}/${id}.json`,
+          data
+        );
+        console.log(res);
+        console.log("deleted successfully");
+      } catch (error) {
+        console.log(`Some error ${error}`);
+      }
+      setIsLoading(false);
     }
   };
+
   return (
     <div className="flex justify-center">
       <form className="bg-gray-500 h-30  rounded-lg">
@@ -64,12 +106,23 @@ const ExpensesForm = (props) => {
           </select>
 
           <div className="flex justify-center p-3">
-            <button
-              className=" bg-black text-white p-1 px-5 rounded-md"
-              onClick={buttonHandler}
-            >
-              Add
-            </button>
+            {!ctx.isEditOn && (
+              <button
+                className=" bg-black text-white p-1 px-5 rounded-md"
+                onClick={buttonHandler}
+              >
+                {isLoading ? "Loading" : "Submit"}
+              </button>
+            )}
+
+            {ctx.isEditOn && (
+              <button
+                className=" bg-black text-white p-1 px-5 rounded-md"
+                onClick={editHandler}
+              >
+                {isLoading ? "Loading" : "Update"}
+              </button>
+            )}
           </div>
         </div>
       </form>

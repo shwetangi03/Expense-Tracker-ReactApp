@@ -33,7 +33,7 @@ const Navbar = () => {
       </NavLink>
 
       <div className="px-2 p-1 bg-gray-400 text-white rounded-lg">
-        <button onClick={logoutHandler}>{ctx.isLohin?'Logout':"Login"}</button>
+        <button onClick={logoutHandler}>Logout</button>
       </div>
 
       <hr className="border-gray-300 border-1"></hr>

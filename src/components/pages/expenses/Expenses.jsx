@@ -24,7 +24,12 @@ const Expenses = () => {
       let arr = [];
       let index = 0;
       for (const key in data) {
-        arr[index] = data[key];
+        arr[index] =  {
+          enteredCategory:data[key].enteredCategory,
+          enteredDescription:data[key].enteredDescription,
+          enteredMoney:data[key].enteredMoney,
+          id:key,
+        }
         index++;
       }
       setItems([...arr]);
@@ -43,6 +48,8 @@ const Expenses = () => {
         money={element.enteredMoney}
         description={element.enteredDescription}
         category={element.enteredCategory}
+        id={element.id}
+        key={element.id}
       />
     );
   });
