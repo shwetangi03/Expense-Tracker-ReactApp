@@ -37,10 +37,10 @@ const ExpensesList = (props) => {
           <label> {props.money}</label>
         </div>
         <div className="px-3">
-          <button onClick={editBtnHandler}>Edit</button>
+          <button className="bg-green-300 border-2 px-4" onClick={editBtnHandler}>Edit</button>
         </div>
         <div className="px-3">
-          <button onClick={deleteBtnHandler}>Delete</button>
+          <button className="bg-green-300 border-2 px-4" onClick={deleteBtnHandler}>Delete</button>
         </div>
       </li>
     </div>

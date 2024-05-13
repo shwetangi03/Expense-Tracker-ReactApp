@@ -1,17 +1,18 @@
 import React, { useContext } from "react";
 import { useHistory, NavLink } from "react-router-dom";
-import ExpenseContext from "../../store/expense-context";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../reduxStore/auth";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
-  const ctx = useContext(ExpenseContext);
 
   const logoutHandler = (event) => {
     event.preventDefault();
     localStorage.setItem("JWTTOKEN", "");
     localStorage.setItem("userID", "");
     localStorage.setItem("Email", "");
-    ctx.login(false);
+    dispatch(authActions.logout());
     history.replace("./auth");
   };
 
@@ -24,7 +25,10 @@ const Navbar = () => {
         Home
       </NavLink>
 
-      <NavLink to="/expenses" className="px-2 p-1 bg-gray-400 text-white rounded-lg">
+      <NavLink
+        to="/expenses"
+        className="px-2 p-1 bg-gray-400 text-white rounded-lg"
+      >
         Products
       </NavLink>
 

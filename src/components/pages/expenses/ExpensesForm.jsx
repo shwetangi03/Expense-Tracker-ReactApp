@@ -1,8 +1,11 @@
 import axios from "axios";
 import React, { useContext, useRef, useState } from "react";
 import ExpenseContext from "../../../store/expense-context";
+import { useDispatch } from "react-redux";
+import { itemsAction } from "../../../reduxStore/fetchData";
 
 const ExpensesForm = (props) => {
+  const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false);
   const ctx = useContext(ExpenseContext);
   const moneyRef = useRef();
@@ -26,7 +29,7 @@ const ExpensesForm = (props) => {
           data
         );
         console.log(res);
-        ctx.itemsSetup(data);
+        dispatch(itemsAction.newExpenses(data))
       } catch (error) {
         console.log(`Some error ${error}`);
       }

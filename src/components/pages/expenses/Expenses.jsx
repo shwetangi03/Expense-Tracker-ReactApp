@@ -1,23 +1,16 @@
-import React, { useContext, useEffect } from "react";
-
-import ExpenseContext from "../../../store/expense-context";
 import Card from "./Card";
 import ExpensesTotal from "./ExpensesTotal";
 import ExpensesForm from "./ExpensesForm";
 import ExpensesList from "./ExpensesList";
-
+import { useDispatch, useSelector } from "react-redux";
 
 const Expenses = () => {
-  const CTX = useContext(ExpenseContext);
+  const dispatch = useDispatch();
+  const itemsX = useSelector((state) => state.itemsData.itemList);
 
-  const auto = () => {
-    CTX.forReload();
-  };
-  useEffect(auto, []);
+  console.log(itemsX);
 
-  const itemsli = CTX.items;
-
-  const itemsList = itemsli.map((element) => {
+  const itemsList = itemsX.map((element) => {
     return (
       <ExpensesList
         money={element.enteredMoney}
@@ -36,7 +29,7 @@ const Expenses = () => {
       </Card>
       <Card>{itemsList}</Card>
       <Card>
-        <ExpensesTotal total={CTX.total} />
+        <ExpensesTotal />
       </Card>
     </div>
   );

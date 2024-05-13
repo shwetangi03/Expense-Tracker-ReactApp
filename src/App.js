@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React, { useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import ExpenseContext from "./store/expense-context";
 
 import SignupPage from "./components/pages/SignupPage";
 import Navbar from "./components/navbar/Navbar";
@@ -8,39 +7,46 @@ import WelcomePage from "./components/pages/WelcomePage";
 import UserDetailsUpdate from "./components/pages/UserDetailsUpdate";
 import ResetPassword from "./components/pages/ResetPassword";
 import Expenses from "./components/pages/expenses/Expenses";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "./reduxStore/auth";
 
 const App = () => {
-  const ctx = useContext(ExpenseContext);
+  const dispatch = useDispatch();
+  const login = useSelector((state) => state.auth.isAuthenticated);
+
+  useEffect(() => {
+    dispatch(authActions.checker());
+  }, []);
 
   return (
     <div>
-      {ctx.isLogin &&<Navbar />}
+      <Navbar />
       <Switch>
-        {!ctx.isLogin && (
+        {!login && (
           <Route path="/auth">
             <SignupPage />
           </Route>
         )}
 
-        {ctx.isLogin && (
+        {login && (
           <Route path="/welcome">
             <WelcomePage />
           </Route>
         )}
 
-        {ctx.isLogin && (
+        {login && (
           <Route path={"/user"}>
             <UserDetailsUpdate />
           </Route>
         )}
 
-        {!ctx.isLogin && (
+        {!login && (
           <Route path={"/resetPassword"}>
             <ResetPassword />
           </Route>
         )}
 
-        {ctx.isLogin && (
+        {login && (
           <Route path={"/expenses"}>
             <Expenses />
           </Route>

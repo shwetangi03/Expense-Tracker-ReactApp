@@ -1,6 +1,8 @@
 import React, { useContext, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import ExpenseContext from "../../store/expense-context";
+
+import { useDispatch } from "react-redux";
+import { authActions } from "../../reduxStore/auth";
 
 const SignupPage = () => {
   const emailRef = useRef();
@@ -8,7 +10,7 @@ const SignupPage = () => {
   const passwordTwoRef = useRef();
   const [swap, setSwap] = useState(false);
   const history = useHistory();
-  const ctx = useContext(ExpenseContext)
+  const dispatch = useDispatch();
 
   const swapHandler = () => {
     setSwap((prevValue) => !prevValue);
@@ -50,7 +52,7 @@ const SignupPage = () => {
             localStorage.setItem("Email", data.email);
             emailRef.current.value = "";
             passwordRef.current.value = "";
-            ctx.login(true)
+            dispatch(authActions.login());
             history.replace("/welcome");
           } else {
             const data = await res.json();
