@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import "./App.css";
 
 import SignupPage from "./components/pages/SignupPage";
 import Navbar from "./components/navbar/Navbar";
@@ -13,13 +14,14 @@ import { authActions } from "./reduxStore/auth";
 const App = () => {
   const dispatch = useDispatch();
   const login = useSelector((state) => state.auth.isAuthenticated);
+  const darkMode = useSelector((state) => state.darkMode.isDarkMode);
 
   useEffect(() => {
     dispatch(authActions.checker());
   }, []);
 
   return (
-    <div>
+    <div className={darkMode ? "invert" : ""}>
       <Navbar />
       <Switch>
         {!login && (
